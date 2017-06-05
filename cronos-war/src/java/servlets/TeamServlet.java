@@ -9,6 +9,7 @@ import entities.Team;
 import facades.TeamFacade;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,16 +22,17 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class TeamServlet extends HttpServlet {
 
+    @EJB
     private TeamFacade teamFac;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String answer;
         ObjectMapper mapper = new ObjectMapper();
-        if (request.getMethod() == "GET") {
+        if ("GET".equals(request.getMethod())) {
             //получение списка команд??
             answer = mapper.writeValueAsString(teamFac.findAll());
-        } else if (request.getMethod() == "POST") {
+        } else if ("POST".equals(request.getMethod())) {
             //добавление команды
             String ids_prefix = request.getParameter("ids") + "_";
             Team newTeam = new Team();
