@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <servlet>
+        <servlet-name>SportsmenController</servlet-name>
+        <servlet-class>servlets.SportsmenController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TeamServlet</servlet-name>
+        <servlet-class>servlets.TeamServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RaceController</servlet-name>
+        <servlet-class>servlets.RaceController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RaceTypeController</servlet-name>
+        <servlet-class>servlets.RaceTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SportsmenController</servlet-name>
+        <url-pattern>/SportsmenController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TeamServlet</servlet-name>
+        <url-pattern>/TeamServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RaceController</servlet-name>
+        <url-pattern>/RaceController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RaceTypeController</servlet-name>
+        <url-pattern>/RaceTypeController</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+</web-app>
