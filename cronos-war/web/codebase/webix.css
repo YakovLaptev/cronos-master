@@ -7947,3 +7947,14 @@ a:active .webix_custom_radio {
 .webix_view table {
   border-collapse: initial;
 }
+
+
+.receSpacer {
+    background: #9966cc;
+}
+
+.startButton {
+    margin: 0;
+    background: greenyellow;
+    border-radius: 10px;
+}

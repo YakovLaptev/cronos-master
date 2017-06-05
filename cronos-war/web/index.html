@@ -23,7 +23,6 @@ and open the template in the editor.
     <body>       
         <script type="text/javascript" charset="utf-8">
 
-
             var cells = [
                 {
                     header: "Данные о спортсмене",
@@ -57,20 +56,14 @@ and open the template in the editor.
                     header: "Текущие гонки",
                     body: {
                         id: "currentRace",
-                        view: "list"}
-                },
-                {
-                    header: "Прошедшие гонки",
-                    body: {
-                        id: "archiveRaces",
-                        rows: [details,raceArchive]
+                        cols: [laps, {css: "receSpacer", width: 5, height: 1000}, shoots] //webix.css 7952                        
                     }
                 },
                 {
-                    header: "Предстоящие гонки",
+                    header: "Гонки",
                     body: {
-                        id: "nextRaces",
-                        template: "<p>Следующие гонки</p>"
+                        id: "archiveRaces",
+                        rows: [raceArchive]
                     }
                 }
             ];
@@ -80,7 +73,8 @@ and open the template in the editor.
                 view: "tabview",
                 width: document.documentElement.clientWidth - sideWidth,
                 cells: cells,
-                animate: false};
+                animate: false,
+            };
 
             var mainForm = {
                 id: "mainForm",
