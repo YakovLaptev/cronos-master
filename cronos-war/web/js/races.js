@@ -21,23 +21,37 @@ var details = {
     hidden: false
 };
 
+var laps = {
+    id: "laps",
+    view: "label",
+    label: "laps",
+    align: "center"
+};
+
+var shoots = {
+    id: "shoots",
+    view: "label",
+    label: "shoots",
+    align: "center"
+};
+
 var raceArchive = {
     id: "raceArchive",
     view: "list",
     type: {
         width: "auto",
-        template: "#id#. #fio# (#teamID#)"
+        template: "#id#. Место проведения: #location# Время: #eventTime#  Тип гонки: #type.raceTypeName# Количество участников: #type.participantsNumber# Количество выстрелов: #type.shootingNumber#"
     },
     url: "http://localhost:8080/cronos-war/RaceController",
-    datatype: "json",
-    editable: true,
-    on: {
-        onItemClick: function (id) {
-            getDetail(id); //функция получения результатов гонки по id
-            $$('details').define("label", details); //пока просто вывод результатов в label
-            $$('details').refresh();
-        }
-    }
+    datatype: "json"
+//    editable: true,
+//    on: {
+//        onItemClick: function (id) {
+//            getDetail(id); //функция получения результатов гонки по id
+//            $$('details').define("label", details); //пока просто вывод результатов в label
+//            $$('details').refresh();
+//        }
+//    }
 };
 
 

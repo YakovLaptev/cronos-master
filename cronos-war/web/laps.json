@@ -1,5 +1,6 @@
 {
-    "marks": [{
+    "marks": [
+        {
             "id": 1,
             "markTime": 0,
             "startOrEnd": true,
@@ -28,7 +29,8 @@
                 }
             },
             "type": "Lap"
-        }, {
+        },
+        {
             "id": 3,
             "markTime": 3000,
             "startOrEnd": true,
@@ -43,7 +45,8 @@
             },
             "type": "Lap"
         }
-        , {
+        ,
+        {
             "id": 4,
             "markTime": 4200,
             "startOrEnd": true,
@@ -57,7 +60,8 @@
                 }
             },
             "type": "Lap"
-        }, {
+        },
+        {
             "id": 5,
             "markTime": 6000,
             "startOrEnd": true,
@@ -71,5 +75,6 @@
                 }
             },
             "type": "Lap"
-        }]
+        }
+    ]
 }

@@ -87,9 +87,10 @@ public class RaceType implements Serializable, IWritableEntity, IJsonParsable {
 
     @Override
     public String toString() {
-        return "entities.RaceType[ id=" + id + " ]";
+        return "Тип гонки: " + raceTypeName + ", количество участников:=" + participantsNumber + ", количество выстрелов=" + shootingNumber;
     }
 
+   
     @Override
     public String FriendlyName() {
         return raceTypeName;
