@@ -21,14 +21,14 @@ var details = {
     hidden: false
 };
 
-var laps = {
+var laps2 = {
     id: "laps",
     view: "label",
     label: "laps",
     align: "center"
 };
 
-var shoots = {
+var shoots2 = {
     id: "shoots",
     view: "label",
     label: "shoots",

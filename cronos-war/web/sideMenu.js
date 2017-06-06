@@ -11,10 +11,15 @@ var laps = {
     align: "center",
     data: lapsMass,
     template: "#type#: #markTime#",
-    onAfterAdd: function (){
-        this.refresh();
-    }
-    
+};
+
+var shootingList = {
+    id: "shootingList",
+    view: "list",
+    label: "shootings",
+    align: "center",
+    data: shootings,
+    template: "#type#: #markTime#",
 };
 
 var shoots = {
@@ -37,17 +42,21 @@ function onError(evt) {
 function sendText(text) {
     console.log("sending text: " + text);
     websocket.send(text);
-}  
+}
 
 function onMessage(evt) {
     //console.log("received: " + evt.data);    
     var mark = JSON.parse(evt.data);
 //    console.log(mark);
-    if (mark.type === "Lap"){
-        lapsMass.push(mark);        
+    if (mark.type === "Lap") {
+        lapsMass.push(mark);
+        $$("laps").define("data", lapsMass);
+        $$("laps").refresh();
     }
-    if (mark.type === "Shoot"){
-        shootings.push(mark);    
+    if (mark.type === "Shoot") {
+        shootings.push(mark);
+        $$("shootingList").define("data", lapsMass);
+        $$("shootingList").refresh();
     }
     console.log("Laps: ");
     console.log(lapsMass);
@@ -76,8 +85,8 @@ var startButton = {
     id: "startButton",
     view: 'button',
     value: "Старт",
-    type:"iconTop",
-    icon:"play",
+    type: "iconTop",
+    icon: "play",
     align: "center",
     click: function () {
         sendText("start");
@@ -89,13 +98,13 @@ var startButton = {
 };
 
 
-
 var sideMenu = {
     width: sideWidth,
     rows: [
         {template: "<img src='icons/norway.png' height=20 alt='Log in'></>", height: 30, id: "login"},
         {template: "<img src='icons/russia.png' height=20></>", height: 30},
         {template: "<img src='icons/france.png' height=20></>", height: 30},
-        {cols: [startButton]}
+        {cols: [startButton]},
+        {}
     ]
 };
