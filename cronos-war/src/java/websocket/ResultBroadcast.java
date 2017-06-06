@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.ejb.EJB;
+import javax.ejb.Stateful;
+import javax.inject.Inject;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -34,9 +36,10 @@ import org.codehaus.jackson.map.ObjectMapper;
  * @author Анюта
  */
 @ServerEndpoint(value = "/ResultBroadcast")
+@Stateful
 public class ResultBroadcast {
 
-    @EJB
+    @Inject
     private RaceFacade raceFac;
     private static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
     private List<Mark> resultList = new ArrayList<Mark>();
@@ -58,10 +61,10 @@ public class ResultBroadcast {
 
     public void readFromFile() throws IOException {
         ObjectMapper mapper = new ObjectMapper();   
-        ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
-        LapMarkContainer lapMarkContainer = (LapMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\laps.json"), LapMarkContainer.class);    
-        //ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Анюта\\Desktop\\Универ\\6 СЕМЕСТР\\РПС\\Курсовик Biathlon\\cronos\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
-        //LapMarkContainer lapMarkContainer = (LapMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Анюта\\Desktop\\Универ\\6 СЕМЕСТР\\РПС\\Курсовик Biathlon\\cronos\\cronos-war\\web\\laps.json"), LapMarkContainer.class);
+//        ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
+//        LapMarkContainer lapMarkContainer = (LapMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\laps.json"), LapMarkContainer.class);    
+        ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Анюта\\Desktop\\Универ\\6 СЕМЕСТР\\РПС\\Курсовик Biathlon\\cronos\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
+        LapMarkContainer lapMarkContainer = (LapMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Анюта\\Desktop\\Универ\\6 СЕМЕСТР\\РПС\\Курсовик Biathlon\\cronos\\cronos-war\\web\\laps.json"), LapMarkContainer.class);
         resultList.addAll(shootMarkContainer.getMarks());
         resultList.addAll(lapMarkContainer.getMarks());
         Collections.sort(resultList, new MarkComparator());
@@ -105,6 +108,7 @@ public class ResultBroadcast {
             }
             for (Object o:resultsSet){
                 RaceResult rr = (RaceResult)o;
+                rr.setId(null);
                 Race r = raceFac.find(rr.getRace().getId());
                 r.getRaceResults().add(rr);
                 raceFac.edit(r);
