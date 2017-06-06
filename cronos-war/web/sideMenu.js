@@ -21,8 +21,11 @@ var shootingList = {
     label: "shootings",
     align: "center",
     data: shootings,
-    template: "#type#: #markTime#",
+    template: function (obj) {
+        return "<div class='round'></div>" //webix.css 7962
+    }
 };
+
 
 var shoots = {
     id: "shoots",
