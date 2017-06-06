@@ -10,6 +10,10 @@
                     <file>${reference.cronos-ejb.dist}</file>
                 </library>
                 <library dirs="200">
+                    <file>${libs.primefaces.classpath}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
                     <file>${file.reference.jackson-all-1.9.0.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
@@ -22,6 +26,7 @@
                 <root id="test.src.dir" name="Тесты"/>
             </test-roots>
         </data>
+        <libraries xmlns="http://www.netbeans.org/ns/cdnjs-libraries/1"/>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
                 <foreign-project>cronos-ejb</foreign-project>

@@ -145,7 +145,7 @@ var addSportsmenForm = {
         {
             name: "team",
             view: "richselect",
-            options: listTeam, // Заменить на listTeam когда будет связь с контроллерами ? 
+            options: listTeam, 
             placeholder: "Выберите команду",
             align: "left",
             width: 250
