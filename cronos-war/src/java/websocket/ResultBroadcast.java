@@ -7,14 +7,18 @@ package websocket;
 
 import entities.Mark;
 import entities.MarkComparator;
+import entities.Race;
+import entities.RaceResult;
 import facades.RaceFacade;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.ejb.EJB;
 import javax.websocket.EncodeException;
@@ -65,6 +69,8 @@ public class ResultBroadcast {
 
     @OnMessage
     public void broadcastResult(String message, Session session) throws InterruptedException, IOException, EncodeException {
+        Set resultsSet = new HashSet();
+        
         if ("start".equals(message)) {
 
             readFromFile();
@@ -83,12 +89,26 @@ public class ResultBroadcast {
                 }
                 now = m.getMarkTime(); //меняем предыдущую отметку
                 currentHistory.add(m); //записываем в историю
-                //где-то тут должна быть запись в БД, подумаю потом
+                resultsSet.add(m.getRaceResult());
+                for (Object o:resultsSet){
+                    RaceResult rr = (RaceResult)o;
+                    if (rr.getId() == m.getRaceResult().getId()){
+                        rr.getRaceResults().add(m);
+                    }
+                }
+                
                 if (!m.getStartOrEnd()) {
                     raceIsOn = false;
                     currentHistory.clear();
                     System.out.println("end of race");
                 } //если последняя метка, то сбрасываем флаг и историю
+            }
+            for (Object o:resultsSet){
+                RaceResult rr = (RaceResult)o;
+                Race r = raceFac.find(rr.getRace().getId());
+                r.getRaceResults().add(rr);
+                raceFac.edit(r);
+                
             }
         }
 
