@@ -7,16 +7,22 @@ package websocket;
 
 import entities.Mark;
 import entities.MarkComparator;
+import entities.Race;
+import entities.RaceResult;
 import facades.RaceFacade;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.ejb.EJB;
+import javax.ejb.Stateful;
+import javax.inject.Inject;
 import javax.websocket.EncodeException;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
@@ -30,9 +36,10 @@ import org.codehaus.jackson.map.ObjectMapper;
  * @author Анюта
  */
 @ServerEndpoint(value = "/ResultBroadcast")
+@Stateful
 public class ResultBroadcast {
 
-    @EJB
+    @Inject
     private RaceFacade raceFac;
     private static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
     private List<Mark> resultList = new ArrayList<Mark>();
@@ -56,8 +63,8 @@ public class ResultBroadcast {
         ObjectMapper mapper = new ObjectMapper();   
         ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
         LapMarkContainer lapMarkContainer = (LapMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\laps.json"), LapMarkContainer.class);    
-        //ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Анюта\\Desktop\\Универ\\6 СЕМЕСТР\\РПС\\Курсовик Biathlon\\cronos\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
-        //LapMarkContainer lapMarkContainer = (LapMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Анюта\\Desktop\\Универ\\6 СЕМЕСТР\\РПС\\Курсовик Biathlon\\cronos\\cronos-war\\web\\laps.json"), LapMarkContainer.class);
+       // ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Анюта\\Desktop\\Универ\\6 СЕМЕСТР\\РПС\\Курсовик Biathlon\\cronos\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
+      //  LapMarkContainer lapMarkContainer = (LapMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Анюта\\Desktop\\Универ\\6 СЕМЕСТР\\РПС\\Курсовик Biathlon\\cronos\\cronos-war\\web\\laps.json"), LapMarkContainer.class);
         resultList.addAll(shootMarkContainer.getMarks());
         resultList.addAll(lapMarkContainer.getMarks());
         Collections.sort(resultList, new MarkComparator());
@@ -65,6 +72,8 @@ public class ResultBroadcast {
 
     @OnMessage
     public void broadcastResult(String message, Session session) throws InterruptedException, IOException, EncodeException {
+        Set resultsSet = new HashSet();
+        
         if ("start".equals(message)) {
 
             readFromFile();
@@ -83,12 +92,27 @@ public class ResultBroadcast {
                 }
                 now = m.getMarkTime(); //меняем предыдущую отметку
                 currentHistory.add(m); //записываем в историю
-                //где-то тут должна быть запись в БД, подумаю потом
+                resultsSet.add(m.getRaceResult());
+                for (Object o:resultsSet){
+                    RaceResult rr = (RaceResult)o;
+                    if (rr.getId() == m.getRaceResult().getId()){
+                        rr.getRaceResults().add(m);
+                    }
+                }
+                
                 if (!m.getStartOrEnd()) {
                     raceIsOn = false;
                     currentHistory.clear();
                     System.out.println("end of race");
                 } //если последняя метка, то сбрасываем флаг и историю
+            }
+            for (Object o:resultsSet){
+                RaceResult rr = (RaceResult)o;
+                rr.setId(null);
+                Race r = raceFac.find(rr.getRace().getId());
+                r.getRaceResults().add(rr);
+                raceFac.edit(r);
+                
             }
         }
 

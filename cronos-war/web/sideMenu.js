@@ -1,19 +1,90 @@
-/* global $$, webix */
+/* global $$ */
 
-var sideWidth = document.documentElement.clientHeight / 17;
+var sideWidth = document.documentElement.clientHeight / 18;
+var wsUri = "ws://" + document.location.host + "/cronos-war/ResultBroadcast";
+var websocket = new WebSocket(wsUri);
+var lapsMass = [];
+var shootings = [];
 
+var laps = {
+    id: "laps",
+    view: "list",
+    label: "laps",
+    align: "center",
+    data: lapsMass,
+    template: "#type#: #markTime#",
+};
 
+var shootingList = {
+    id: "shootingList",
+    view: "list",
+    label: "shootings",
+    align: "center",
+    data: shootings,
+    template: "#type#: #markTime#",
+};
+
+var shoots = {
+    id: "shoots",
+    view: "label",
+    label: "shoots",
+    align: "center"
+};
+
+websocket.onerror = function (evt) {
+    onError(evt);
+};
+websocket.onmessage = function (evt) {
+    onMessage(evt);
+};
+
+function onError(evt) {
+    writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+}
+function sendText(text) {
+    console.log("sending text: " + text);
+    websocket.send(text);
+}
+
+function onMessage(evt) {
+    //console.log("received: " + evt.data);    
+    var mark = JSON.parse(evt.data);
+//    console.log(mark);
+    if (mark.type === "Lap") {
+        lapsMass.push(mark);
+        $$("laps").define("data", lapsMass);
+        $$("laps").refresh();
+    }
+    if (mark.type === "Shoot") {
+        shootings.push(mark);
+        $$("shootingList").define("data", lapsMass);
+        $$("shootingList").refresh();
+    }
+    console.log("Laps: ");
+    console.log(lapsMass);
+    console.log("Shootings: ");
+    console.log(shootings);
+
+    //для каждого марк смотрим результата
+    //для каждой новой марки типа лап рисуем новую плашечку
+    //для стрельб нужен контейнер - shootingID
+    //проверяем айди контейнера стрельбы - рисуем кружочек в соответствующий див
+    //
+    //итак, проверка на тип марки
+    //если стрельба - проверка на айди контейнера
+    //записываем его в сет
+    //если в сете его не было, рисуем новую плашку
+    //если был - дорисовываем в старую
+    //нужен номер выстрела в контейнере - numberInShooting
+
+//    var newdiv = document.createElement('div');
+//    newdiv.innerHTML = mark.raceResult.id;
+//    newdiv.className = 'containerForRounds';
+//    document.body.appendChild(newdiv);
+}
 
 var role = "";
 var answer = "";
-
-
-
-var labelRole = {
-    id: "labelRole",
-    view: "label",
-    label: role
-};
 
 var labelLogin = {
     id: "labelLogin",
@@ -21,8 +92,6 @@ var labelLogin = {
     label: role,
     align: "center"
 };
-
-
 
 var startButton = {
     id: "startButton",
@@ -32,7 +101,7 @@ var startButton = {
     icon: "play",
     align: "center",
     click: function () {
-        //старт
+        sendText("start");
     },
     width: sideWidth,
     height: 45,
@@ -43,12 +112,10 @@ var startButton = {
 var startButtonForm = {
     id: "startButtonForm",
     view: 'form',
-    elements: [startButton, labelRole],
+    elements: [startButton],
     hidden: true,
     padding: 0
 };
-
-
 
 var loginForm = {
     id: "loginForm",
@@ -97,9 +164,6 @@ var loginForm = {
     padding: 0
 };
 
-
-
-
 function login() {
     var login = $$('loginForm').getValues().login;
     var pass = $$('loginForm').getValues().pass;
@@ -116,9 +180,7 @@ function login() {
             role = answer;
             $$('loginForm').hide();
             $$('loginForm').clear();
-            $$("labelRole").define("label", role);
-            $$("labelRole").refresh();
-            $$("startButtonForm").define("label", role);
+            //$$("startButtonForm").define("label", role);
             $$("startButtonForm").refresh();
             $$("startButtonForm").show();
             $$("loginButton").hide();
