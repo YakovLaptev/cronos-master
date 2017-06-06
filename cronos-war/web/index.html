@@ -20,10 +20,11 @@ and open the template in the editor.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
+
     <body> 
-        
+
         <script type="text/javascript" charset="utf-8">
-            
+
             var cells = [
                 {
                     header: "Данные о спортсмене",
@@ -74,18 +75,19 @@ and open the template in the editor.
                 view: "tabview",
                 width: document.documentElement.clientWidth - sideWidth,
                 cells: cells,
-                animate: false,
+                animate: false
             };
-            
-            
+
+
             var mainForm = {
                 id: "mainForm",
                 rows: [
                     loginForm,
-                    {cols: [                    
-                        sideMenu,
-                        tabview
-                    ]}
+                    {cols: [
+                            sideMenu,
+                            tabview
+                        ]
+                    }
                 ]
             };
             webix.ui(mainForm);
