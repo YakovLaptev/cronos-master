@@ -5,6 +5,7 @@ var wsUri = "ws://" + document.location.host + "/cronos-war/ResultBroadcast";
 var websocket = new WebSocket(wsUri);
 var lapsMass = [];
 var shootings = [];
+shootings.lenght = 0;
 
 var laps = {
     id: "laps",
@@ -12,7 +13,7 @@ var laps = {
     label: "laps",
     align: "center",
     data: lapsMass,
-    template: "#type#: #markTime#",
+    template: "#raceResult.racer.name#. #type# #id# time: #markTime/1000#"
 };
 
 var shootingList = {
@@ -21,8 +22,22 @@ var shootingList = {
     label: "shootings",
     align: "center",
     data: shootings,
+    type:{height:60},
     template: function (obj) {
-        return "<div class='round'></div>" //webix.css 7962
+        var result = obj.sportsmanName + ". Shooting "+obj.id + 
+                ": <div class=containerForRounds>";
+        for (var i = 0; i < 5; i++) {
+            if (obj.marks[i] == undefined) {
+                result += "<div class=round></div>";
+            } else if (obj.marks[i].slip == true) {
+                result += "<div class=redRound></div>";
+            } else {
+                result += "<div class=whiteRound></div>";
+            }            
+        }
+        result+="</div>";
+        return result;
+        //webix.css 7962
     }
 };
 
@@ -50,35 +65,57 @@ function sendText(text) {
 }
 
 function onMessage(evt) {
-    //console.log("received: " + evt.data);    
     var mark = JSON.parse(evt.data);
-//    console.log(mark);
     if (mark.type === "Lap") {
         lapsMass.push(mark);
         $$("laps").define("data", lapsMass);
         $$("laps").refresh();
     }
-    if (mark.type === "Shoot") {
-        shootings.push(mark);
-        $$("shootingList").define("data", lapsMass);
-        $$("shootingList").refresh();
-    }
-    console.log("Laps: ");
-    console.log(lapsMass);
-    console.log("Shootings: ");
-    console.log(shootings);
+    if (mark.type == "Shoot") {
+        var resultNum = -1;
+        for (var i = 0; i < shootings.lenght; i++) {
+            if (shootings[i].id == mark.shootingID)
+            {
+                resultNum = i;
+                break;
+            }
+        }
+        if (resultNum == -1) { //ничего не нашли, создаем новый
+            shootings.push({
+                id: mark.shootingID, 
+                marks: [mark], 
+                length: 0,
+                sportsmanName:mark.raceResult.racer.name
+            });
+            shootings.lenght++;
+            //тут сделаем рефреш
+            //тут найдем эту плашку не знаю пока как
+            //тут нарисуем ей черные кружочки
+        } else { //нашли, пишем в старый
+            shootings[resultNum].marks.push(mark);
+            shootings[resultNum].length++;
+            //снова находим соответсвтующую плашку и в ней у сооответствующего кружочка меняем класс
+        }
+        //или это все фигня, в темлейте напишем функцию добавления даты в лист внутри элемента листа
 
-    //для каждого марк смотрим результата
-    //для каждой новой марки типа лап рисуем новую плашечку
-    //для стрельб нужен контейнер - shootingID
-    //проверяем айди контейнера стрельбы - рисуем кружочек в соответствующий див
-    //
-    //итак, проверка на тип марки
-    //если стрельба - проверка на айди контейнера
-    //записываем его в сет
-    //если в сете его не было, рисуем новую плашку
-    //если был - дорисовываем в старую
-    //нужен номер выстрела в контейнере - numberInShooting
+        $$("shootingList").define("data", shootings);
+        $$("shootingList").refresh();
+        console.log(shootings);
+    }
+
+
+
+//для каждого марк смотрим результата
+//для каждой новой марки типа лап рисуем новую плашечку
+//для стрельб нужен контейнер - shootingID
+//проверяем айди контейнера стрельбы - рисуем кружочек в соответствующий див
+//
+//итак, проверка на тип марки
+//если стрельба - проверка на айди контейнера
+//записываем его в сет
+//если в сете его не было, рисуем новую плашку
+//если был - дорисовываем в старую
+//нужен номер выстрела в контейнере - numberInShooting
 
 //    var newdiv = document.createElement('div');
 //    newdiv.innerHTML = mark.raceResult.id;
@@ -116,7 +153,7 @@ var startButtonForm = {
     id: "startButtonForm",
     view: 'form',
     elements: [startButton],
-    hidden: true,
+    //hidden: true,
     padding: 0
 };
 

@@ -7,7 +7,8 @@
             "raceResult": {
                 "id": 1,
                 "racer": {
-                    "id": 1
+                    "id": 1,
+                    "name":"Anton Shipulin"
                 },
                 "race": {
                     "id": 1
@@ -22,7 +23,8 @@
             "raceResult": {
                 "id": 1,
                 "racer": {
-                    "id": 1
+                    "id": 1,
+                    "name":"Anton Shipulin"
                 },
                 "race": {
                     "id": 1
@@ -37,7 +39,8 @@
             "raceResult": {
                 "id": 1,
                 "racer": {
-                    "id": 1
+                    "id": 1,
+                    "name":"Anton Shipulin"
                 },
                 "race": {
                     "id": 1
@@ -53,7 +56,8 @@
             "raceResult": {
                 "id": 1,
                 "racer": {
-                    "id": 1
+                    "id": 1,
+                    "name":"Anton Shipulin"
                 },
                 "race": {
                     "id": 1
@@ -68,7 +72,89 @@
             "raceResult": {
                 "id": 1,
                 "racer": {
+                    "id": 1,
+                    "name":"Anton Shipulin"
+                },
+                "race": {
                     "id": 1
+                }
+            },
+            "type": "Lap"
+        },
+        {
+            "id": 6,
+            "markTime": 0,
+            "startOrEnd": true,
+            "raceResult": {
+                "id": 1,
+                "racer": {
+                    "id": 2,
+                    "name":"Alexey Volkov"
+                },
+                "race": {
+                    "id": 1
+                }
+            },
+            "type": "Lap"
+        },
+        {
+            "id": 7,
+            "markTime": 2100,
+            "startOrEnd": true,
+            "raceResult": {
+                "id": 1,
+                "racer": {
+                    "id": 2,
+                    "name":"Alexey Volkov"
+                },
+                "race": {
+                    "id": 1
+                }
+            },
+            "type": "Lap"
+        },
+        {
+            "id": 8,
+            "markTime": 3300,
+            "startOrEnd": true,
+            "raceResult": {
+                "id": 1,
+                "racer": {
+                    "id": 2,
+                    "name":"Alexey Volkov"
+                },
+                "race": {
+                    "id": 1
+                }
+            },
+            "type": "Lap"
+        }
+        ,
+        {
+            "id": 9,
+            "markTime": 4400,
+            "startOrEnd": true,
+            "raceResult": {
+                "id": 1,
+                "racer": {
+                    "id": 2,
+                    "name":"Alexey Volkov"
+                },
+                "race": {
+                    "id": 1
+                }
+            },
+            "type": "Lap"
+        },
+        {
+            "id": 10,
+            "markTime": 6200,
+            "startOrEnd": true,
+            "raceResult": {
+                "id": 1,
+                "racer": {
+                    "id": 2,
+                    "name":"Alexey Volkov"
                 },
                 "race": {
                     "id": 1
