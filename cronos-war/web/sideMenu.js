@@ -1,6 +1,6 @@
 /* global $$ */
 
-var sideWidth = document.documentElement.clientHeight / 18;
+var sideWidth = 60;
 var wsUri = "ws://" + document.location.host + "/cronos-war/ResultBroadcast";
 var websocket = new WebSocket(wsUri);
 var lapsMass = [];
@@ -152,8 +152,8 @@ var startButton = {
 var startButtonForm = {
     id: "startButtonForm",
     view: 'form',
-    elements: [startButton],
-    //hidden: true,
+    elements: [startButton,{}],
+    hidden: true,
     padding: 0
 };
 

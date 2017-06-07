@@ -12,6 +12,6 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  * @author Анюта
  */
 public interface IWritableEntity {
-    @JsonIgnore
+    
     public String FriendlyName();
 }

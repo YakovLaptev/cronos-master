@@ -38,16 +38,11 @@ var listSportsmen = {
     save: "connector->http://localhost:8080/cronos-war/SportsmenController",
     templateItem: " #name# (#accuracy#)",
     templateBack: "Назад",
-    /**
-     *  почему то не умеет обращаться к полям другого поля через точку..
-     *  мне кажется надо не через точку, ибо этож json, там не объекты тебе даются..
-     *  как то подругому парсить надо. 
-     *  легче будет добавить поле teamName ?? и выводить его как в тестовой версии было...
-     */
-    //templateGroup: "#team&teamName#",
+    templateGroup: "#value#",
+    
     scheme: {
-        $group:function(obj){
-            return obj.team.id;
+        $group:function(obj){            
+            return obj.team.teamName;
         }
     },
     select: true,
@@ -149,6 +144,7 @@ var addSportsmenForm = {
             placeholder: "Выберите команду",
             align: "left",
             width: 250
+            
         },
         {
             view: 'button',
