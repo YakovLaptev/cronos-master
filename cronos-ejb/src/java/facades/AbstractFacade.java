@@ -24,18 +24,22 @@ public abstract class AbstractFacade<T> {
 
     public void create(T entity) {
         getEntityManager().persist(entity);
+        System.out.println("created " + entityClass.toString());
     }
 
     public void edit(T entity) {
         getEntityManager().merge(entity);
+        System.out.println("edited " + entityClass.toString());
     }
 
     public void remove(T entity) {
         getEntityManager().remove(getEntityManager().merge(entity));
+        System.out.println("removed " + entityClass.toString());
     }
 
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
+        
     }
 
     public List<T> findAll() {

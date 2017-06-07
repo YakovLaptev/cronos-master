@@ -1,7 +1,21 @@
 var sideWidth = document.documentElement.clientHeight / 18;
 var wsUri = "ws://" + document.location.host + "/cronos-war/ResultBroadcast";
 var websocket = new WebSocket(wsUri);
-var lapsMass = [];
+var lapsMass = [{
+            "id": 1,
+            "markTime": 0,
+            "startOrEnd": true,
+            "raceResult": {
+                "id": 1,
+                "racer": {
+                    "id": 1
+                },
+                "race": {
+                    "id": 1
+                }
+            },
+            "type": "Lap"
+        }];
 var shootings = [];
 
 var laps = {
@@ -11,12 +25,12 @@ var laps = {
     align: "center",
     data: lapsMass,
     template: "#type#: #markTime#",
-    onAfterAdd: function (){
-        this.refresh();
-    }
+    onClick: function(){this.refresh();console.log("refresh");}
     
 };
 
+document.
+ 
 var shoots = {
     id: "shoots",
     view: "label",

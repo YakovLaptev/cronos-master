@@ -60,7 +60,7 @@ public class ResultBroadcast {
     }
 
     public void readFromFile() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();   
+        ObjectMapper mapper = new ObjectMapper();
 //        ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
 //        LapMarkContainer lapMarkContainer = (LapMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\laps.json"), LapMarkContainer.class);    
         ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Анюта\\Desktop\\Универ\\6 СЕМЕСТР\\РПС\\Курсовик Biathlon\\cronos\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
@@ -73,7 +73,7 @@ public class ResultBroadcast {
     @OnMessage
     public void broadcastResult(String message, Session session) throws InterruptedException, IOException, EncodeException {
         Set resultsSet = new HashSet();
-        
+
         if ("start".equals(message)) {
 
             readFromFile();
@@ -82,7 +82,7 @@ public class ResultBroadcast {
                 return;
             }
             raceIsOn = true;
-            Long now = 0L;            
+            Long now = 0L;
             resultList.get(resultList.size() - 1).setStartOrEnd(Boolean.FALSE);
             for (Mark m : resultList) { //для каждой отметки
                 System.out.println("broadcastFigure: " + m.toString());
@@ -93,27 +93,26 @@ public class ResultBroadcast {
                 now = m.getMarkTime(); //меняем предыдущую отметку
                 currentHistory.add(m); //записываем в историю
                 resultsSet.add(m.getRaceResult());
-                for (Object o:resultsSet){
-                    RaceResult rr = (RaceResult)o;
-                    if (rr.getId() == m.getRaceResult().getId()){
+                for (Object o : resultsSet) {
+                    RaceResult rr = (RaceResult) o;
+                    if (rr.getId() == m.getRaceResult().getId()) {
                         rr.getRaceResults().add(m);
                     }
                 }
-                
-                if (!m.getStartOrEnd()) {
-                    raceIsOn = false;
-                    currentHistory.clear();
-                    System.out.println("end of race");
-                } //если последняя метка, то сбрасываем флаг и историю
+
+              
             }
-            for (Object o:resultsSet){
-                RaceResult rr = (RaceResult)o;
+            for (Object o : resultsSet) {
+                RaceResult rr = (RaceResult) o;
                 rr.setId(null);
                 Race r = raceFac.find(rr.getRace().getId());
                 r.getRaceResults().add(rr);
                 raceFac.edit(r);
-                
+
             }
+            raceIsOn = false;
+            currentHistory.clear();
+            System.out.println("end of race");
         }
 
     }

@@ -21,19 +21,7 @@ var details = {
     hidden: false
 };
 
-var laps = {
-    id: "laps",
-    view: "label",
-    label: "laps",
-    align: "center"
-};
 
-var shoots = {
-    id: "shoots",
-    view: "label",
-    label: "shoots",
-    align: "center"
-};
 
 var raceArchive = {
     id: "raceArchive",

@@ -2,7 +2,7 @@
     "marks": [
         {
             "id": 1,
-            "markTime": 100000,
+            "markTime": 1000,
             "startOrEnd": true,
             "raceResult": {
                 "id": 1,
@@ -28,7 +28,7 @@
         },
         {
             "id": 2,
-            "markTime": 102000,
+            "markTime": 1100,
             "startOrEnd": true,
             "raceResult": {
                 "id": 1,
