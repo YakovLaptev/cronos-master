@@ -18,7 +18,7 @@ class LapEncoder implements Encoder.Text<LapMark> {
 
     @Override
     public void init(EndpointConfig config) {
-       System.out.println("init");
+        System.out.println("init");
     }
 
     @Override
@@ -30,5 +30,5 @@ class LapEncoder implements Encoder.Text<LapMark> {
     public String encode(LapMark object) throws EncodeException {
         return object.toJson();
     }
-    
+
 }

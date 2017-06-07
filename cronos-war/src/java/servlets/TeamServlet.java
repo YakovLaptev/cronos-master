@@ -29,10 +29,8 @@ public class TeamServlet extends HttpServlet {
         String answer;
         ObjectMapper mapper = new ObjectMapper();
         if ("GET".equals(request.getMethod())) {
-            //получение списка команд??
             answer = mapper.writeValueAsString(teamFac.findAll());
         } else if ("POST".equals(request.getMethod())) {
-            //добавление команды
             String ids_prefix = request.getParameter("ids") + "_";
             Team newTeam = new Team();
             newTeam.setIcon(request.getParameter(ids_prefix + "icon"));

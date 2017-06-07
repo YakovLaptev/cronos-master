@@ -14,20 +14,21 @@ import java.util.List;
  * @author Анюта
  */
 public class LapMarkContainer {
-   private List<LapMark> marks;
 
-        public List<LapMark> getMarks() {
-            return marks;
-        }
+    private List<LapMark> marks;
 
-        public void setMarks(List<LapMark> marks) {
-            this.marks = marks;
-        }
+    public List<LapMark> getMarks() {
+        return marks;
+    }
 
-        public LapMarkContainer(List<LapMark> marks) {
-            this.marks = marks;
-        }
-        
-        public LapMarkContainer() {
-        }     
+    public void setMarks(List<LapMark> marks) {
+        this.marks = marks;
+    }
+
+    public LapMarkContainer(List<LapMark> marks) {
+        this.marks = marks;
+    }
+
+    public LapMarkContainer() {
+    }
 }

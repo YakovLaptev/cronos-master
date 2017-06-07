@@ -39,17 +39,8 @@ public class ResultBroadcast {
     private RaceFacade raceFac;
     private static Set<Session> peers = Collections.synchronizedSet(new HashSet<Session>());
     private List<Mark> resultList = new ArrayList<Mark>();
-    private Boolean raceIsOn = false; //флаг того, что какая-то гонка начата, надо сбросить по завершении    
-
-    //потом надо разбирать сообщение от клиента? тут вроде только старт будет со стороны клиента
-    //паузу и остановку выкидываем, скорость подберем в файле
-    //алгоритм такой - ловим месседж от клиента, вытягиваем из файла результат, транслируем месседжи с указанием того, начальный он или конечный
-    //при отправке конченого сбрасываем флаг
-    //при подключении нового пира отправляем сразу всю историю - нужен флаг
-    //на клиенте ловим месседжи, по типу результата вычисляем что рисовать - мишень или блок отметки
-    //нужен нулевой выстрел без типа попадания - отметка прихода на стрельбу для отрисовки пустых мишененей
-    //для мишени определяем попал или нет - показываем красненький или беленький кружочек вместо черного
-    private static List<Mark> currentHistory = new ArrayList<Mark>(); //для истории - лист с отправленными метками - заносим туда после отправки
+    private Boolean raceIsOn = false;
+    private static List<Mark> currentHistory = new ArrayList<Mark>();
 
     public List<Mark> getResultList() {
         return resultList;
@@ -57,8 +48,8 @@ public class ResultBroadcast {
 
     public void readFromFile() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-//        ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
-//        LapMarkContainer lapMarkContainer = (LapMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\laps.json"), LapMarkContainer.class);    
+        //ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
+        //LapMarkContainer lapMarkContainer = (LapMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Azzaz\\Рабочий стол\\курсовик джава\\cronos-2-master\\cronos-war\\web\\laps.json"), LapMarkContainer.class);
         ShootMarkContainer shootMarkContainer = (ShootMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Анюта\\Desktop\\Универ\\6 СЕМЕСТР\\РПС\\cronos-master\\cronos-master\\cronos-war\\web\\shooting.json"), ShootMarkContainer.class);
         LapMarkContainer lapMarkContainer = (LapMarkContainer) mapper.readValue(new FileInputStream("C:\\Users\\Анюта\\Desktop\\Универ\\6 СЕМЕСТР\\РПС\\cronos-master\\cronos-master\\cronos-war\\web\\laps.json"), LapMarkContainer.class);
         resultList.addAll(shootMarkContainer.getMarks());
@@ -80,14 +71,14 @@ public class ResultBroadcast {
             raceIsOn = true;
             Long now = 0L;
             resultList.get(resultList.size() - 1).setStartOrEnd(Boolean.FALSE);
-            for (Mark m : resultList) { //для каждой отметки
+            for (Mark m : resultList) {
                 System.out.println("broadcastFigure: " + m.toString());
-                Thread.sleep(m.getMarkTime() - now);//ждем столько, сколько до текущей отметки от предыдущей
-                for (Session peer : peers) {  //и для каждого пира                  
-                    peer.getBasicRemote().sendText(m.toJson()); //рассылаем отметку
+                Thread.sleep(m.getMarkTime() - now);
+                for (Session peer : peers) {
+                    peer.getBasicRemote().sendText(m.toJson());
                 }
-                now = m.getMarkTime(); //меняем предыдущую отметку
-                currentHistory.add(m); //записываем в историю
+                now = m.getMarkTime();
+                currentHistory.add(m);
                 resultsSet.add(m.getRaceResult());
                 for (Object o : resultsSet) {
                     RaceResult rr = (RaceResult) o;
@@ -96,7 +87,6 @@ public class ResultBroadcast {
                     }
                 }
 
-              
             }
             for (Object o : resultsSet) {
                 RaceResult rr = (RaceResult) o;

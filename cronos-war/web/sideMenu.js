@@ -22,9 +22,9 @@ var shootingList = {
     label: "shootings",
     align: "center",
     data: shootings,
-    type:{height:60},
+    type: {height: 60},
     template: function (obj) {
-        var result = obj.sportsmanName + ". Shooting "+obj.id + 
+        var result = obj.sportsmanName + ". Shooting " + obj.id +
                 ": <div class=containerForRounds>";
         for (var i = 0; i < 5; i++) {
             if (obj.marks[i] == undefined) {
@@ -33,11 +33,10 @@ var shootingList = {
                 result += "<div class=redRound></div>";
             } else {
                 result += "<div class=whiteRound></div>";
-            }            
+            }
         }
-        result+="</div>";
+        result += "</div>";
         return result;
-        //webix.css 7962
     }
 };
 
@@ -80,47 +79,22 @@ function onMessage(evt) {
                 break;
             }
         }
-        if (resultNum == -1) { //ничего не нашли, создаем новый
+        if (resultNum == -1) {
             shootings.push({
-                id: mark.shootingID, 
-                marks: [mark], 
+                id: mark.shootingID,
+                marks: [mark],
                 length: 0,
-                sportsmanName:mark.raceResult.racer.name
+                sportsmanName: mark.raceResult.racer.name
             });
             shootings.lenght++;
-            //тут сделаем рефреш
-            //тут найдем эту плашку не знаю пока как
-            //тут нарисуем ей черные кружочки
-        } else { //нашли, пишем в старый
+        } else {
             shootings[resultNum].marks.push(mark);
             shootings[resultNum].length++;
-            //снова находим соответсвтующую плашку и в ней у сооответствующего кружочка меняем класс
         }
-        //или это все фигня, в темлейте напишем функцию добавления даты в лист внутри элемента листа
-
         $$("shootingList").define("data", shootings);
         $$("shootingList").refresh();
         console.log(shootings);
     }
-
-
-
-//для каждого марк смотрим результата
-//для каждой новой марки типа лап рисуем новую плашечку
-//для стрельб нужен контейнер - shootingID
-//проверяем айди контейнера стрельбы - рисуем кружочек в соответствующий див
-//
-//итак, проверка на тип марки
-//если стрельба - проверка на айди контейнера
-//записываем его в сет
-//если в сете его не было, рисуем новую плашку
-//если был - дорисовываем в старую
-//нужен номер выстрела в контейнере - numberInShooting
-
-//    var newdiv = document.createElement('div');
-//    newdiv.innerHTML = mark.raceResult.id;
-//    newdiv.className = 'containerForRounds';
-//    document.body.appendChild(newdiv);
 }
 
 var role = "";
@@ -152,7 +126,7 @@ var startButton = {
 var startButtonForm = {
     id: "startButtonForm",
     view: 'form',
-    elements: [startButton,{}],
+    elements: [startButton, {}],
     hidden: true,
     padding: 0
 };
@@ -220,7 +194,6 @@ function login() {
             role = answer;
             $$('loginForm').hide();
             $$('loginForm').clear();
-            //$$("startButtonForm").define("label", role);
             $$("startButtonForm").refresh();
             $$("startButtonForm").show();
             $$("loginButton").hide();
@@ -250,9 +223,6 @@ var loginButton = {
 var sideMenu = {
     width: sideWidth,
     rows: [
-//        {template: "<img src='icons/norway.png' height=20 alt='Log in'></>", height: 30, id: "login"},
-//        {template: "<img src='icons/russia.png' height=20></>", height: 30},
-//        {template: "<img src='icons/france.png' height=20></>", height: 30},
         {height: 2},
         {rows: [startButtonForm]},
         {rows: [loginButton]},

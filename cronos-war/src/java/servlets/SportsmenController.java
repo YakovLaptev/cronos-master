@@ -61,7 +61,6 @@ public class SportsmenController extends HttpServlet {
             }
             newSportsman.setGender(Boolean.valueOf(request.getParameter(ids_prefix + "gender")));
             Long teamId = mapper.readValue(request.getParameter(ids_prefix + "team"), long.class);
-            //Team newTeam = (Team) mapper.readValue(request.getParameter(ids_prefix + "team"), Team.class);
             newSportsman.setTeam(teamFac.find(teamId));
             sportsmenFac.create(newSportsman);
             answer = mapper.writeValueAsString(newSportsman);
