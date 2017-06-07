@@ -23,14 +23,25 @@ function addTeam() {
 }
 ;
 
+
 var sideWidth = document.documentElement.clientHeight / 20;
 
 var listTeam = {
-    id: "listTeam",  
+    id: "listTeam",
+    view: "grouplist",
+    url: "http://localhost:8080/cronos-war/TeamServlet",
+    datatype: "json",
+    save: "connector->http://localhost:8080/cronos-war/TeamServlet",
+    hidden: true
+};
+
+var listTeamForSportsmen = {
+    id: "listTeamForSportsmen",
     url: "http://localhost:8080/cronos-war/TeamServlet",
     datatype: "json",
     save: "connector->http://localhost:8080/cronos-war/TeamServlet"
 };
+
 
 var listSportsmen = {
     id: "listSportsmen",
@@ -39,9 +50,8 @@ var listSportsmen = {
     templateItem: " #name# (#accuracy#)",
     templateBack: "Назад",
     templateGroup: "#value#",
-    
     scheme: {
-        $group:function(obj){            
+        $group: function (obj) {
             return obj.team.teamName;
         }
     },
@@ -68,8 +78,8 @@ var addTeamForm = {
             type: "form",
             align: "left",
             click: function () {
-                $$('addTeamForm').hide();
                 addTeam();
+                $$('addTeamForm').hide();
                 $$('addTeamForm').clear();
             },
             width: 250
@@ -107,7 +117,7 @@ var addSportsmenForm = {
         {
             name: "accuracy",
             view: "slider",
-            value: 50, 
+            value: 50,
             min: 1,
             max: 100,
             title: "Точность: 0.5",
@@ -140,11 +150,11 @@ var addSportsmenForm = {
         {
             name: "team",
             view: "richselect",
-            options: listTeam, 
+            options: listTeamForSportsmen,
             placeholder: "Выберите команду",
             align: "left",
             width: 250
-            
+
         },
         {
             view: 'button',

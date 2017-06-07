@@ -5,17 +5,9 @@
  */
 package servlets;
 
-import entities.Sportsman;
-import entities.Team;
-import facades.SportsmanFacade;
-import facades.TeamFacade;
+import entities.User;
+import facades.UserFacade;
 import java.io.IOException;
-import java.sql.Date;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,46 +17,27 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  *
- * @author Анюта
+ * @author Yakov
  */
-public class SportsmenController extends HttpServlet {
+public class LoginController extends HttpServlet {
 
     @EJB
-    private SportsmanFacade sportsmenFac;
-    @EJB
-    private TeamFacade teamFac;
+    private UserFacade userFacade;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String answer;
         ObjectMapper mapper = new ObjectMapper();
-        if (request.getMethod() == "GET") {
-            try {
-                answer = mapper.writeValueAsString(sportsmenFac.findAll());
-
-            } catch (IOException ex) {
-                answer = ex.getLocalizedMessage();
-                response.setStatus(500);
-
+        if ("POST".equals(request.getMethod())) {
+            User requestUser = new User();
+            requestUser.setUsername(request.getParameter("login"));
+            requestUser.setPassword(request.getParameter("pass"));
+            User responseUser = userFacade.find(requestUser.getUsername());
+            if (responseUser.getPassword().equals(requestUser.getPassword())) {
+                answer = mapper.writeValueAsString(responseUser.getRole());
+            } else {
+                answer =  mapper.writeValueAsString("Incorrect password, pls try again");
             }
-            
 
-        } else if (request.getMethod() == "POST") {
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String ids_prefix = request.getParameter("ids")+"_";
-            Sportsman newSportsman = new Sportsman();
-            newSportsman.setName(request.getParameter(ids_prefix + "name"));
-            newSportsman.setAccuracy(Float.valueOf(request.getParameter(ids_prefix + "accuracy")));
-            try {
-                newSportsman.setBirtdate( format.parse(request.getParameter(ids_prefix + "birthdate")));
-            } catch (ParseException ex) {
-                Logger.getLogger(SportsmenController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            newSportsman.setGender(Boolean.valueOf(request.getParameter(ids_prefix + "gender")));
-            Long teamId = mapper.readValue(request.getParameter(ids_prefix + "team"), long.class);
-            //Team newTeam = (Team) mapper.readValue(request.getParameter(ids_prefix + "team"), Team.class);
-            newSportsman.setTeam(teamFac.find(teamId));
-            sportsmenFac.create(newSportsman);
-            answer = mapper.writeValueAsString(newSportsman);
         } else {
             answer = "Incorrect METHOD";
         }

@@ -60,9 +60,8 @@ public class SportsmenController extends HttpServlet {
                 Logger.getLogger(SportsmenController.class.getName()).log(Level.SEVERE, null, ex);
             }
             newSportsman.setGender(Boolean.valueOf(request.getParameter(ids_prefix + "gender")));
-            Long teamId = mapper.readValue(request.getParameter(ids_prefix + "team"), long.class);
-            //Team newTeam = (Team) mapper.readValue(request.getParameter(ids_prefix + "team"), Team.class);
-            newSportsman.setTeam(teamFac.find(teamId));
+            Team newTeam = (Team) mapper.readValue(request.getParameter(ids_prefix + "team"), Team.class);
+            newSportsman.setTeam(teamFac.find(newTeam.getId()));
             sportsmenFac.create(newSportsman);
             answer = mapper.writeValueAsString(newSportsman);
         } else {
